@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     string dsname;
     bool dense;
     ss >> dsname >> boolalpha >> dense;
-    datasets.push_back({dsname, dense});
+    datasets.emplace_back(dsname, dense);
   }
 
   if (!vm.count("dataset-id")) {
@@ -154,7 +154,8 @@ int main(int argc, char *argv[]) {
         cout << "k = " << k << ", t = " << t << ", fval = " << fval
              << ", nnz = " << nnz << '\n';
 
-        traces[nlocal] = {k, t, fval, nnz};
+        traces[nlocal] =
+            tuple<index_t, value_t, value_t, index_t>(k, t, fval, nnz);
       }
     });
 

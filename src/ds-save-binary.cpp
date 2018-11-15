@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     bool dense;
     index_t nsamples, nfeatures;
     ss >> dsname >> boolalpha >> dense >> nsamples >> nfeatures;
-    datasets.push_back({dsname, dense, nsamples, nfeatures});
+    datasets.emplace_back(dsname, dense, nsamples, nfeatures);
   }
 
   if (!vm.count("dataset-id")) {
