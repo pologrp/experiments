@@ -14,7 +14,7 @@ add_custom_command(
   OUTPUT
     data/rcv1-0
   COMMAND
-    wget --no-verbose --show-progress --output-document data/rcv1-0.bz2
+    curl --output data/rcv1-0.bz2
       https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/rcv1_test.binary.bz2
   COMMAND
     bunzip2 data/rcv1-0.bz2
