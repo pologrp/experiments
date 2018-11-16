@@ -86,10 +86,7 @@ initiate the superbuild:
 git clone https://github.com/pologrp/experiments $HOME/experiments
 mkdir $HOME/experiments/build
 cd $HOME/experiments/build
-cmake -D CMAKE_INSTALL_PREFIX=$HOME/local \
-      -D CMAKE_BUILD_TYPE=Release         \
-      -D BUILD_SHARED_LIBS=ON             \
-      ../
+cmake -D CMAKE_INSTALL_PREFIX=$HOME/local ../
 cmake --build .
 ```
 

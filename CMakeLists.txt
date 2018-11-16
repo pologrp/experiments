@@ -4,6 +4,8 @@ project(experiments-super)
 
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX})
 
+find_package(polo CONFIG QUIET)
+
 include(ExternalProject)
 set_directory_properties(PROPERTIES EP_BASE external)
 
