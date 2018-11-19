@@ -232,6 +232,8 @@ add_custom_target(figures ALL
     results/rcv1-0-ps-piag.csv
   COMMAND
     pdflatex figures.tex
+  COMMAND
+    ${CMAKE_COMMAND} -E echo "Successfully compiled experiment figures in ${experiments_BINARY_DIR}/figures.pdf"
   COMMENT
     "Generating the figures..."
 )

@@ -53,6 +53,10 @@ export LD_LIBRARY_PATH
 After saving the file, we need to `source $HOME/.bash_profile` to make the
 changes valid for the current session.
 
+**NOTE.** On some systems, we *might* need to set
+[`DYLD_FALLBACK_LIBRARY_PATH`](https://stackoverflow.com/a/3172515/4720025)
+instead of `LD_LIBRARY_PATH` above.
+
 Now that we have setup the paths, we can proceed with the installation of CMake.
 POLO requires CMake (at least `v3.9.0`) to install its headers and C-API while
 managing its dependencies. Moreover, this repository also contains a superbuild
