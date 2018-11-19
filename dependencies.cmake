@@ -27,13 +27,12 @@ if (NOT polo_FOUND)
       https://github.com/xianyi/OpenBLAS
     GIT_TAG
       v0.3.3
-    CMAKE_ARGS
-      -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-      -D CMAKE_BUILD_TYPE=Release
-      -D BUILD_SHARED_LIBS=ON
-      -D BUILD_WITHOUT_LAPACK=OFF
-      -D BUILD_WITHOUT_CBLAS=ON
-      -D DYNAMIC_ARCH=OFF
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND
+      make NO_LAPACK=0 NO_CBLAS=1
+    BUILD_IN_SOURCE 1
+    INSTALL_COMMAND
+      make PREFIX=${CMAKE_INSTALL_PREFIX} install
   )
 
   ExternalProject_Add(
