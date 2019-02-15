@@ -107,10 +107,6 @@ int main(int argc, char *argv[]) {
                           smoothing::none, prox::l1norm, execution::serial>
       alg;
   alg.step_parameters(1 / L / B);
-  auto loss = [&](const value_t *x, value_t *g, const index_t *ibegin,
-                  const index_t *iend) -> value_t {
-    return logloss.incremental(x, g, ibegin, iend);
-  };
   string suffix{"serial-mb"};
 #elif defined SERIAL_MB_ADAM
   algorithm::proxgradient<value_t, index_t, boosting::momentum, step::constant,
@@ -119,10 +115,6 @@ int main(int argc, char *argv[]) {
   alg.step_parameters(1. / B);
   alg.boosting_parameters(0.9, 0.1);
   alg.smoothing_parameters(0.999, 1E-8);
-  auto loss = [&](const value_t *x, value_t *g, const index_t *ibegin,
-                  const index_t *iend) -> value_t {
-    return logloss.incremental(x, g, ibegin, iend);
-  };
   string suffix = "serial-mb-adam-" + to_string(M);
 #elif defined SERIAL_MB_AMSGRAD
   algorithm::proxgradient<value_t, index_t, boosting::momentum, step::constant,
@@ -131,10 +123,6 @@ int main(int argc, char *argv[]) {
   alg.step_parameters(1. / B);
   alg.boosting_parameters(0.9, 0.1);
   alg.smoothing_parameters(0.999, 1E-8);
-  auto loss = [&](const value_t *x, value_t *g, const index_t *ibegin,
-                  const index_t *iend) -> value_t {
-    return logloss.incremental(x, g, ibegin, iend);
-  };
   string suffix = "serial-mb-amsgrad-" + to_string(M);
 #elif defined SERIAL_MB_ADAM_BLOCK
 #define BLOCK
@@ -144,11 +132,6 @@ int main(int argc, char *argv[]) {
   alg.step_parameters(1. / B);
   alg.boosting_parameters(0.9, 0.1);
   alg.smoothing_parameters(0.999, 1E-8);
-  auto loss = [&](const value_t *x, value_t *g, const index_t *i1begin,
-                  const index_t *i1end, const index_t *i2begin,
-                  const index_t *i2end) -> value_t {
-    return logloss(x, g, i1begin, i1end, i2begin, i2end);
-  };
   string suffix = "serial-mb-adam-block-" + to_string(Md);
 #elif defined CONSISTENT_MB_ADAM_BLOCK
 #define BLOCK
@@ -165,11 +148,6 @@ int main(int argc, char *argv[]) {
   alg.boosting_parameters(0.9, 0.1);
   alg.smoothing_parameters(0.999, 1E-8);
   alg.execution_parameters(W);
-  auto loss = [&](const value_t *x, value_t *g, const index_t *i1begin,
-                  const index_t *i1end, const index_t *i2begin,
-                  const index_t *i2end) -> value_t {
-    return logloss(x, g, i1begin, i1end, i2begin, i2end);
-  };
   string suffix =
       "consistent-mb-adam-block-" + to_string(Md) + "-" + to_string(W);
 #elif defined INCONSISTENT_MB_ADAM_BLOCK
@@ -187,11 +165,6 @@ int main(int argc, char *argv[]) {
   alg.boosting_parameters(0.9, 0.1);
   alg.smoothing_parameters(0.999, 1E-8);
   alg.execution_parameters(W);
-  auto loss = [&](const value_t *x, value_t *g, const index_t *i1begin,
-                  const index_t *i1end, const index_t *i2begin,
-                  const index_t *i2end) -> value_t {
-    return logloss(x, g, i1begin, i1end, i2begin, i2end);
-  };
   string suffix =
       "inconsistent-mb-adam-block-" + to_string(Md) + "-" + to_string(W);
 #endif
@@ -213,21 +186,21 @@ int main(int argc, char *argv[]) {
   cout << "  - dsfile : " << dsfile << '\n';
   cout << "  - suffix : " << suffix << '\n';
   cout << "  - M      : " << M << '\n';
-#if defined BLOCK
+#ifdef BLOCK
   cout << "  - B      : " << Md << '\n';
 #endif
   cout << "  - lambda1: " << lambda1 << '\n';
   cout << "  - K      : " << K << '\n';
   auto tstart = chrono::high_resolution_clock::now();
 
-#if defined BLOCK
+#ifdef BLOCK
   utility::sampler::uniform<index_t> blocksampler;
   blocksampler.parameters(0, d - 1);
-  alg.solve(loss, utility::sampler::component, sampler, M,
+  alg.solve(logloss, utility::sampler::component, sampler, M,
             utility::sampler::coordinate, blocksampler, Md,
             utility::terminator::maxiter<value_t, index_t>(K), logger);
 #else
-  alg.solve(loss, utility::sampler::component, sampler, M,
+  alg.solve(logloss, utility::sampler::component, sampler, M,
             utility::terminator::maxiter<value_t, index_t>(K), logger);
 #endif
 
