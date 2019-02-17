@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     bool dense;
     index_t N, d;
     ss >> dsname >> boolalpha >> dense >> N >> d;
-    datasets.emplace_back(std::move(dsname), dense, N, d);
+    datasets.emplace_back(move(dsname), dense, N, d);
   }
 
 #ifdef WORKER
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
   encoder::identity<value_t, index_t> enc;
 
   cout << "Experiment will run with:\n";
-  cout << "  - ds     : " << std::get<0>(datasets[id]) << '\n';
+  cout << "  - ds     : " << get<0>(datasets[id]) << '\n';
   cout << "  - suffix : " << suffix << '\n';
   cout << "  - lambda1: " << lambda1 << '\n';
   cout << "  - K      : " << K << '\n';
@@ -160,7 +160,7 @@ int main(int argc, char *argv[]) {
             logger);
 
 #ifdef MASTER
-  const string logfile = "results/" + std::get<0>(datasets[id]) + "-" +
+  const string logfile = "results/" + get<0>(datasets[id]) + "-" +
                          to_string(fid) + "-" + suffix + ".bin";
   cout << "Writing the logged states to " << logfile << "...\n";
   ofstream file(logfile, ios_base::binary);

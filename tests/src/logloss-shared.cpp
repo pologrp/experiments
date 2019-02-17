@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     string dsname;
     bool dense;
     ss >> dsname >> boolalpha >> dense;
-    datasets.emplace_back(std::move(dsname), dense);
+    datasets.emplace_back(move(dsname), dense);
   }
 
   if (!vm.count("dataset-id")) {

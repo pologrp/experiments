@@ -43,7 +43,7 @@ void split_files(const vector<string> &inputs, const vector<string> &outputs,
 }
 
 template <class T> ostream &operator<<(ostream &os, const vector<T> &vec) {
-  copy(std::begin(vec), std::end(vec), ostream_iterator<T>(os, " "));
+  copy(begin(vec), end(vec), ostream_iterator<T>(os, " "));
   return os;
 }
 
@@ -81,9 +81,9 @@ int main(int argc, char *argv[]) {
     return 3;
   }
 
-  std::cout << "Input files: " << vm["input"].as<vector<string>>() << '\n';
-  std::cout << "Output files: " << vm["output"].as<vector<string>>() << '\n';
-  std::cout << "Number of files: " << vm["num"].as<vector<int>>() << '\n';
+  cout << "Input files: " << vm["input"].as<vector<string>>() << '\n';
+  cout << "Output files: " << vm["output"].as<vector<string>>() << '\n';
+  cout << "Number of files: " << vm["num"].as<vector<int>>() << '\n';
 
   split_files(inputs, outputs, nums);
 

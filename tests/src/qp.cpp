@@ -227,7 +227,7 @@ int main(int argc, char *argv[]) {
   customlogger<value_t, index_t> logger;
   utility::terminator::maxiter<value_t, index_t> maxiter(K);
 
-  auto tstart = std::chrono::high_resolution_clock::now();
+  auto tstart = chrono::high_resolution_clock::now();
 
   cout << "Starting Gradient Descent iterations...\n";
   gd.solve(qp, enc, maxiter, logger);
