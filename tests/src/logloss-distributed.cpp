@@ -27,6 +27,39 @@ using namespace polo;
 using index_t = int32_t;
 using value_t = float;
 
+template <class value_t, class index_t,
+          template <class, class> class encoder_t = encoder::identity>
+struct customencoder : private encoder_t<value_t, index_t> {
+  using result_type = typename encoder_t<value_t, index_t>::result_type;
+
+  customencoder() = default;
+
+  template <class... Ts>
+  customencoder(Ts &&... args)
+      : encoder_t<value_t, index_t>(std::forward<Ts>(args)...) {}
+
+  template <class RandomIt> result_type operator()(RandomIt gb, RandomIt ge) {
+    result_type res = encoder_t<value_t, index_t>::operator()(gb, ge);
+    bytes_.push_back(bytes_.back() + res.size());
+    return res;
+  }
+
+  template <class RandomIt, class ForwardIt>
+  result_type operator()(RandomIt gb, RandomIt ge, ForwardIt ib, ForwardIt ie) {
+    result_type res = encoder_t<value_t, index_t>::operator()(gb, ge, ib, ie);
+    bytes_.push_back(bytes_.back() + res.size());
+    return res;
+  }
+
+  vector<size_t> bytes() const { return bytes_; }
+
+private:
+  vector<size_t> bytes_{0};
+};
+
+template <class value_t, class index_t>
+using dynamic_t = encoder::dynamic<value_t, index_t, uint8_t>;
+
 int main(int argc, char *argv[]) {
   size_t id;
   index_t fid, K;
@@ -145,7 +178,7 @@ int main(int argc, char *argv[]) {
   alg.initialize(x0);
 
   customlogger<value_t, index_t> logger;
-  encoder::identity<value_t, index_t> enc;
+  customencoder<value_t, index_t> enc;
 
   cout << "Experiment will run with:\n";
   cout << "  - ds     : " << get<0>(datasets[id]) << '\n';
@@ -175,6 +208,15 @@ int main(int argc, char *argv[]) {
     file.write(reinterpret_cast<const char *>(&t), sizeof(value_t));
     file.write(reinterpret_cast<const char *>(&x[0]), d * sizeof(value_t));
   }
+#elif defined WORKER
+  const string logfile = "results/" + get<0>(datasets[id]) + "-" +
+                         to_string(fid) + "-" + suffix + "-comm.csv";
+  ofstream file(logfile);
+  file << "k,bytes\n";
+  const auto bytes = enc.bytes();
+  file << 1 << ',' << bytes[1] << '\n';
+  for (size_t k = 100; k < bytes.size(); k += 100)
+    file << k << ',' << bytes[k] << '\n';
 #endif
 
   auto tend = chrono::high_resolution_clock::now();
