@@ -198,9 +198,11 @@ int main(int argc, char *argv[]) {
   blocksampler.parameters(0, d - 1);
   alg.solve(logloss, utility::sampler::component, sampler, M,
             utility::sampler::coordinate, blocksampler, Md,
+            encoder::identity<value_t, index_t>{},
             utility::terminator::maxiter<value_t, index_t>(K), logger);
 #else
   alg.solve(logloss, utility::sampler::component, sampler, M,
+            encoder::identity<value_t, index_t>{},
             utility::terminator::maxiter<value_t, index_t>(K), logger);
 #endif
 

@@ -145,6 +145,7 @@ int main(int argc, char *argv[]) {
   alg.initialize(x0);
 
   customlogger<value_t, index_t> logger;
+  encoder::identity<value_t, index_t> enc;
 
   cout << "Experiment will run with:\n";
   cout << "  - ds     : " << std::get<0>(datasets[id]) << '\n';
@@ -155,7 +156,8 @@ int main(int argc, char *argv[]) {
   cout << "Master is on " << maddress << '\n';
   auto tstart = chrono::high_resolution_clock::now();
 
-  alg.solve(loss, utility::terminator::maxiter<value_t, index_t>(K), logger);
+  alg.solve(loss, enc, utility::terminator::maxiter<value_t, index_t>(K),
+            logger);
 
 #ifdef MASTER
   const string logfile = "results/" + std::get<0>(datasets[id]) + "-" +

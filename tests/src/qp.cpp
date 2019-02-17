@@ -223,13 +223,14 @@ int main(int argc, char *argv[]) {
   adam.smoothing_parameters(0.999, 1E-8);
   adam.initialize(x0);
 
+  encoder::identity<value_t, index_t> enc;
   customlogger<value_t, index_t> logger;
   utility::terminator::maxiter<value_t, index_t> maxiter(K);
 
   auto tstart = std::chrono::high_resolution_clock::now();
 
   cout << "Starting Gradient Descent iterations...\n";
-  gd.solve(qp, maxiter, logger);
+  gd.solve(qp, enc, maxiter, logger);
   ofstream file("results/qp-serial-gd.csv");
   file << "k,t,fval,|xk-xopt|,f-fopt\n";
   for (const auto &log : logger)
@@ -239,7 +240,7 @@ int main(int argc, char *argv[]) {
 
   cout << "Starting Nesterov iterations...\n";
   logger = customlogger<value_t, index_t>();
-  nesterov.solve(qp, maxiter, logger);
+  nesterov.solve(qp, enc, maxiter, logger);
   file = ofstream("results/qp-serial-nesterov.csv");
   file << "k,t,fval,|xk-xopt|,f-fopt\n";
   for (const auto &log : logger)
@@ -249,7 +250,7 @@ int main(int argc, char *argv[]) {
 
   cout << "Starting Adam iterations...\n";
   logger = customlogger<value_t, index_t>();
-  adam.solve(qp, maxiter, logger);
+  adam.solve(qp, enc, maxiter, logger);
   file = ofstream("results/qp-serial-adam.csv");
   file << "k,t,fval,|xk-xopt|,f-fopt\n";
   for (const auto &log : logger)
