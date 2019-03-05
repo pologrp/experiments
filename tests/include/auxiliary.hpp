@@ -14,7 +14,7 @@ struct customlogger : utility::logger::decision<value_t, index_t> {
   template <class InputIt1, class InputIt2>
   void operator()(const index_t k, const value_t fval, InputIt1 xbegin,
                   InputIt1 xend, InputIt2 gbegin) {
-    if ((k == 1) | (k % 100 == 0)) {
+    if ((k == 1) | (k % 500 == 0)) {
       cout << "Logging at iteration k = " << k << ".\n";
       utility::logger::decision<value_t, index_t>::operator()(k, fval, xbegin,
                                                               xend, gbegin);

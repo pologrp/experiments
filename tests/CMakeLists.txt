@@ -12,27 +12,27 @@ file(MAKE_DIRECTORY ${experiments_BINARY_DIR}/results)
 
 add_custom_command(
   OUTPUT
-    data/rcv1-0
+    data/url-0
   COMMAND
-    curl --output data/rcv1-0.bz2
-      https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/rcv1_test.binary.bz2
+    curl --output data/url-0.bz2
+      https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/url_combined.bz2
   COMMAND
-    bunzip2 data/rcv1-0.bz2
+    bunzip2 data/url-0.bz2
   COMMENT
-    "Downloading and unpacking the rcv1 dataset..."
+    "Downloading and unpacking the url dataset..."
 )
 add_custom_command(
   OUTPUT
-    data/rcv1-0.bin
-    data/rcv1-1.bin
-    data/rcv1-2.bin
-    data/rcv1-3.bin
-    data/rcv1-4.bin
-    data/rcv1-5.bin
+    data/url-0.bin
+    data/url-1.bin
+    data/url-2.bin
+    data/url-3.bin
+    data/url-4.bin
+    data/url-5.bin
   DEPENDS
-    data/rcv1-0
+    data/url-0
   COMMAND
-    csv-splitter -i data/rcv1-0 -o data/rcv1 -n 5
+    csv-splitter -i data/url-0 -o data/url -n 5
   COMMAND
     ds-save-binary -d 0 -s 0
   COMMAND
@@ -46,7 +46,7 @@ add_custom_command(
   COMMAND
     ds-save-binary -d 0 -s 5
   COMMENT
-    "Splitting the rcv1 dataset and saving them in binary format..."
+    "Splitting the url dataset and saving them in binary format..."
 )
 
 # Utilities
@@ -75,37 +75,6 @@ add_executable(simulator
   src/simulator.cpp
 )
 target_link_libraries(simulator
-  PRIVATE
-    Boost::program_options
-    polo::polo
-)
-
-# Binaries for serial execution
-add_executable(qp-experiment
-  src/qp.cpp
-)
-target_include_directories(qp-experiment
-  PRIVATE
-    include
-)
-target_link_libraries(qp-experiment
-  PRIVATE
-    Boost::program_options
-    polo::polo
-)
-
-add_executable(logloss-serial-mb-amsgrad
-  src/logloss-shared.cpp
-)
-target_include_directories(logloss-serial-mb-amsgrad
-  PRIVATE
-    include
-)
-target_compile_definitions(logloss-serial-mb-amsgrad
-  PRIVATE
-    SERIAL_MB_AMSGRAD
-)
-target_link_libraries(logloss-serial-mb-amsgrad
   PRIVATE
     Boost::program_options
     polo::polo
@@ -166,51 +135,14 @@ target_link_libraries(logloss-ps-piag-scheduler
 # Experiments
 add_custom_command(
   OUTPUT
-    results/qp-serial-gd.csv
-    results/qp-serial-nesterov.csv
-    results/qp-serial-adam.csv
-  COMMAND
-    qp-experiment -d 10000 -L 20 -K 2500
-  COMMENT
-    "Running serial QP experiments..."
-)
-add_custom_command(
-  OUTPUT
-    results/rcv1-0-serial-mb-amsgrad-1000.csv
-    results/rcv1-0-serial-mb-amsgrad-5000.csv
-    results/rcv1-0-serial-mb-amsgrad-20000.csv
+    results/url-0-ps-piag.csv
   DEPENDS
-    data/rcv1-0.bin
-    data/rcv1-1.bin
-    data/rcv1-2.bin
-    data/rcv1-3.bin
-    data/rcv1-4.bin
-    data/rcv1-5.bin
-  COMMAND
-    logloss-serial-mb-amsgrad -d 0 -f 0 -l 1e-4 -K 20000 -M 1000
-  COMMAND
-    simulator -d 0 -s 0-serial-mb-amsgrad-1000 -t 0.05
-  COMMAND
-    logloss-serial-mb-amsgrad -d 0 -f 0 -l 1e-4 -K 20000 -M 5000
-  COMMAND
-    simulator -d 0 -s 0-serial-mb-amsgrad-5000 -t 0.05
-  COMMAND
-    logloss-serial-mb-amsgrad -d 0 -f 0 -l 1e-4 -K 20000 -M 20000
-  COMMAND
-    simulator -d 0 -s 0-serial-mb-amsgrad-20000 -t 0.05
-  COMMENT
-    "Running serial logloss experiments..."
-)
-add_custom_command(
-  OUTPUT
-    results/rcv1-0-ps-piag.csv
-  DEPENDS
-    data/rcv1-0.bin
-    data/rcv1-1.bin
-    data/rcv1-2.bin
-    data/rcv1-3.bin
-    data/rcv1-4.bin
-    data/rcv1-5.bin
+    data/url-0.bin
+    data/url-1.bin
+    data/url-2.bin
+    data/url-3.bin
+    data/url-4.bin
+    data/url-5.bin
     logloss-ps-piag-master
     logloss-ps-piag-scheduler
     logloss-ps-piag-worker
@@ -223,13 +155,7 @@ add_custom_command(
 )
 add_custom_target(figures ALL
   DEPENDS
-    results/qp-serial-gd.csv
-    results/qp-serial-nesterov.csv
-    results/qp-serial-adam.csv
-    results/rcv1-0-serial-mb-amsgrad-1000.csv
-    results/rcv1-0-serial-mb-amsgrad-5000.csv
-    results/rcv1-0-serial-mb-amsgrad-20000.csv
-    results/rcv1-0-ps-piag.csv
+    results/url-0-ps-piag.csv
   COMMAND
     pdflatex figures.tex
   COMMAND

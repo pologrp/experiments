@@ -13,110 +13,6 @@
   \centering
   \begin{tikzpicture}
     \begin{semilogyaxis}[
-      name = qp-function,
-      width = 0.5\linewidth,
-      title = Optimality Gap,
-      xlabel = $k$,
-      ylabel = {$\func[\phi]{x_{k}} - \func[\phi]{x^{\star}}$},
-      grid = major,
-      xmin = 0, xmax = 2500,
-      legend entries = {GD\hspace*{1em}, Nesterov\hspace*{1em},
-        Adam\hspace*{1em}},
-      legend columns = -1,
-      legend to name = qp-legend,
-    ]
-    \addplot[blue,solid,thick]
-      table[x = k, y = f-fopt, col sep = comma, header = true]
-      {results/qp-serial-gd.csv};
-    \addplot[red,densely dashed,thick]
-      table[x = k, y = f-fopt, col sep = comma, header = true]
-      {results/qp-serial-nesterov.csv};
-    \addplot[green,densely dotted,thick]
-      table[x = k, y = f-fopt, col sep = comma, header = true]
-      {results/qp-serial-adam.csv};
-    \end{semilogyaxis}
-    \begin{semilogyaxis}[
-      name = qp-iterate,
-      anchor = north west,
-      at = (qp-function.north east),
-      xshift = 5em,
-      width = 0.5\linewidth,
-      title = Iterate Convergence,
-      xlabel = $k$,
-      ylabel = {$\norm{x_{k} - x^{\star}}_{2}^{2}$},
-      grid = major,
-      xmin = 0, xmax = 2500,
-    ]
-    \addplot[blue,solid,thick]
-      table[x = k, y = |xk-xopt|, col sep = comma, header = true]
-      {results/qp-serial-gd.csv};
-    \addplot[red,densely dashed,thick]
-      table[x = k, y = |xk-xopt|, col sep = comma, header = true]
-      {results/qp-serial-nesterov.csv};
-    \addplot[green,densely dotted,thick]
-      table[x = k, y = |xk-xopt|, col sep = comma, header = true]
-      {results/qp-serial-adam.csv};
-    \end{semilogyaxis}
-    \path (qp-function.south) -- node [midway, yshift = -3em, anchor = north]
-      {\pgfplotslegendfromname{qp-legend}} (qp-iterate.south);
-  \end{tikzpicture}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \begin{semilogyaxis}[
-      name = amsgrad-iter,
-      width = 0.5\linewidth,
-      xlabel = $k$,
-      ylabel = {$\func[\phi]{x_{k}}$},
-      grid = major,
-      xmin = 0,
-      legend entries = {$M = 1000$\hspace*{1em}, $M = 5000$\hspace*{1em}, $M =
-        20000$},
-      legend columns = -1,
-      legend to name = amsgrad-legend,
-    ]
-    \addplot[blue,solid,thick]
-      table[x = k, y = fval, col sep = comma, header = true]
-      {results/rcv1-0-serial-mb-amsgrad-1000.csv};
-    \addplot[red,densely dashed,thick]
-      table[x = k, y = fval, col sep = comma, header = true]
-      {results/rcv1-0-serial-mb-amsgrad-5000.csv};
-    \addplot[green,densely dotted,thick]
-      table[x = k, y = fval, col sep = comma, header = true]
-      {results/rcv1-0-serial-mb-amsgrad-20000.csv};
-    \end{semilogyaxis}
-    \begin{semilogyaxis}[
-      name = amsgrad-time,
-      anchor = north west,
-      at = (amsgrad-iter.north east),
-      xshift = 1em,
-      width = 0.5\linewidth,
-      xlabel = $t$ (sec),
-      grid = major,
-      xmin = 0,
-      yticklabels = \empty,
-    ]
-    \addplot[blue,solid,thick]
-      table[x expr = \thisrow{t} / 1000, y = fval, col sep = comma, header = true]
-      {results/rcv1-0-serial-mb-amsgrad-1000.csv};
-    \addplot[red,densely dashed,thick]
-      table[x expr = \thisrow{t} / 1000, y = fval, col sep = comma, header = true]
-      {results/rcv1-0-serial-mb-amsgrad-5000.csv};
-    \addplot[green,densely dotted,thick]
-      table[x expr = \thisrow{t} / 1000, y = fval, col sep = comma, header = true]
-      {results/rcv1-0-serial-mb-amsgrad-20000.csv};
-    \end{semilogyaxis}
-    \path (amsgrad-iter.south) -- node [midway, yshift = -3em, anchor = north]
-      {\pgfplotslegendfromname{amsgrad-legend}} (amsgrad-time.south);
-  \end{tikzpicture}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \begin{semilogyaxis}[
       width = 0.5\linewidth,
       xlabel = $k$,
       ylabel = {$\func[\phi]{x_{k}}$},
@@ -126,7 +22,7 @@
     ]
     \addplot[blue,solid,thick]
       table[x = k, y = fval, col sep = comma, header = true]
-      {results/rcv1-0-ps-piag.csv};
+      {results/url-0-ps-piag.csv};
     \end{semilogyaxis}
   \end{tikzpicture}
 \end{figure}

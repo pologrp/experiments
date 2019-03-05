@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
 
   const index_t N = get<2>(datasets[id]);
   const index_t d = get<3>(datasets[id]);
-  const value_t L = 0.25 * N;
+  const value_t L = 0.25 * 22.668 * N;
 
   string suffix{"ps-piag"};
 
