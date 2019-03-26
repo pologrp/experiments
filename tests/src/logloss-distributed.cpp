@@ -156,8 +156,7 @@ int main(int argc, char *argv[]) {
   cout << "Master is on " << maddress << '\n';
   auto tstart = chrono::high_resolution_clock::now();
 
-  alg.solve(loss, logger, utility::terminator::maxiter<value_t, index_t>(K),
-            enc);
+  alg.solve(loss, logger, terminator::iteration<value_t, index_t>(K), enc);
 
 #ifdef MASTER
   const string logfile = "results/" + get<0>(datasets[id]) + "-" +

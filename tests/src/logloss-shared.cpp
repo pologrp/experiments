@@ -198,10 +198,10 @@ int main(int argc, char *argv[]) {
   blocksampler.parameters(0, d - 1);
   alg.solve(logloss, utility::sampler::component, sampler, M,
             utility::sampler::coordinate, blocksampler, Md, logger,
-            utility::terminator::maxiter<value_t, index_t>(K));
+            terminator::iteration<value_t, index_t>(K));
 #else
   alg.solve(logloss, utility::sampler::component, sampler, M, logger,
-            utility::terminator::maxiter<value_t, index_t>(K));
+            terminator::iteration<value_t, index_t>(K));
 #endif
 
   const string logfile = "results/" + datasets[id].first + "-" +
